@@ -1,6 +1,7 @@
 # Desarrollado por: https://github.com/wthoutjc
 from flask import Flask, request, jsonify, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_mysqldb import MySQL
 # from mysql.connector.errors import Error
 
 # #JSON Web Tokens
@@ -20,6 +21,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # from decimal import Decimal
 
 application = Flask(__name__)
+
+mysql = MySQL(application)
 
 @application.route("/")
 def hello_world():
