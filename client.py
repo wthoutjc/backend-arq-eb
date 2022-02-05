@@ -39,10 +39,12 @@ class SocketIOClient(object):
             # if not thread.is_alive():
             #     thread = RandomThread()
             #     thread.start()
+            socketio.emit('message', {'message': 'Enviado desde backend'})
 
         @socketio.on('disconnect')
         def on_disconnect():
             print(f'Cliente desconectado satisfactoriamente.')
+            socketio.emit('message', {'message': 'Enviado desde backend'})
 
         @socketio.on('messages')
         def on_messages(*args):
