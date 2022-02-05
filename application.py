@@ -15,7 +15,7 @@ from client import SocketIOClient
 
 # Herramientas
 import json                     # Estructura json
-# import datetime                 # Manejo de fechas
+import datetime                 # Manejo de fechas
 from decouple import config
 
 from decimal import Decimal
