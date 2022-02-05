@@ -1,16 +1,15 @@
-# #Configuración de SocketIO
-# from distutils.log import debug
-# from flask_socketio import SocketIO
-# from flask_cors import CORS
+#Configuración de SocketIO
+from flask_socketio import SocketIO
+from flask_cors import CORS
 
 # # Hilos
-# from threading import Thread, Event
+from threading import Thread, Event
 
 # # Herramientas
-# import logging
-# import json
+import logging
+import json
 
-# # import eventlet
+# import eventlet
 
 # # Globals
 # socketio = None

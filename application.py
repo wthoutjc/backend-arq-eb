@@ -11,7 +11,7 @@ from flask_jwt_extended import create_access_token, jwt_required, JWTManager, ge
 from db.db import SQLOperations
 
 # Client
-# from client import SocketIOClient
+from client import SocketIOClient
 
 # Herramientas
 import json                     # Estructura json
