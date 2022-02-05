@@ -1,8 +1,6 @@
 import mysql.connector
-from mysql.connector import errors
 
 # Herramientas
-import os
 import datetime
 from decouple import config
 import logging
