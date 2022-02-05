@@ -1,10 +1,10 @@
 # Desarrollado por: https://github.com/wthoutjc
 from flask import Flask, request, jsonify, make_response
-from werkzeug.security import generate_password_hash, check_password_hash
-from mysql.connector.errors import Error
+# from werkzeug.security import generate_password_hash, check_password_hash
+# from mysql.connector.errors import Error
 
-#JSON Web Tokens
-from flask_jwt_extended import create_access_token, jwt_required, JWTManager, get_jwt
+# #JSON Web Tokens
+# from flask_jwt_extended import create_access_token, jwt_required, JWTManager, get_jwt
 
 # Database
 # from db.db import SQLOperations
@@ -13,11 +13,11 @@ from flask_jwt_extended import create_access_token, jwt_required, JWTManager, ge
 # from client import SocketIOClient
 
 # Herramientas
-import json                     # Estructura json
-import datetime                 # Manejo de fechas
-from decouple import config
+# import json                     # Estructura json
+# import datetime                 # Manejo de fechas
+# from decouple import config
 
-from decimal import Decimal
+# from decimal import Decimal
 
 application = Flask(__name__)
 
