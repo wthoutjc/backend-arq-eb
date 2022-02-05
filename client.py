@@ -51,7 +51,7 @@ class SocketIOClient(object):
             socketio.emit('message', {'message': 'Enviado desde backend'})
 
         # Conexión
-        socketio.run(self.app, host="0.0.0.0", port=80, debug=True) #host="0.0.0.0"
+        socketio.run(self.app, host="0.0.0.0", port=8080, debug=True) #host="0.0.0.0"
         eventlet.monkey_patch(socket=True, select=True)
 
 class RandomThread(Thread):
