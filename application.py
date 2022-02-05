@@ -27,6 +27,17 @@ app.config['SECRET_KEY'] = config('SECRET_KEY')
 app.config['JWT_SECRET_KEY'] = app.config['SECRET_KEY']
 db_operations = SQLOperations()
 
+socketio_client = SocketIOClient(app)
+
+class DecimalEncoder(json.JSONEncoder):
+  def default(self, obj):
+    if isinstance(obj, Decimal):
+      return float(obj)
+    return json.JSONEncoder.default(self, obj)
+
+# JSON WEB TOKEN
+jwt = JWTManager(app)
+
 @app.route("/")
 def hello_world():
     return 'Connected'
