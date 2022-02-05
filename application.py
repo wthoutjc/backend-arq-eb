@@ -15,14 +15,13 @@ from client import SocketIOClient
 # Herramientas
 import json                     # Estructura json
 import datetime                 # Manejo de fechas
-from decouple import config
 
 from decimal import Decimal
 application = Flask(__name__)
 
 app = application
 
-app.config['SECRET_KEY'] = config('SECRET_KEY')
+app.config['SECRET_KEY'] = 'UHGx14#&17NoPRQS#12'
 app.config['JWT_SECRET_KEY'] = app.config['SECRET_KEY']
 db_operations = SQLOperations()
 

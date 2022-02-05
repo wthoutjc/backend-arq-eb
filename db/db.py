@@ -2,7 +2,6 @@ import mysql.connector
 
 # Herramientas
 import datetime
-from decouple import config
 import logging
 
 # Config LOGS
@@ -23,10 +22,10 @@ class SQLOperations(object):
                 'message': None,
                 'payload': None,
             }
-        self.host = config("MYSQL_HOST")
-        self.user = config("MYSQL_USER")
-        self.passwd = config("MYSQL_PASSWORD")
-        self.database = config("MYSQL_DATABASE")
+        self.host = 'database-arq.cc0sxaunqcsm.sa-east-1.rds.amazonaws.com'
+        self.user = 'admin'
+        self.passwd = 'Arq#2022'
+        self.database = 'db_arq'
         self.based = None
         self.ncursor = None
     
