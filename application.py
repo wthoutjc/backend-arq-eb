@@ -22,6 +22,14 @@ from flask_mysqldb import MySQL
 
 application = Flask(__name__)
 
+application.config['MYSQL_HOST'] = 'database-arq.cc0sxaunqcsm.sa-east-1.rds.amazonaws.com'
+application.config['MYSQL_USER'] = 'admin'
+application.config['MYSQL_PASSWORD'] = 'Arq#2022'
+application.config['MYSQL_DB'] = 'db_arq'
+application.config['SECRET_KEY'] = 'UHGx14#&17NoPRQS#12'
+# application.config['JWT_SECRET_KEY'] = 'UHGx14#&17NoPRQS#12'
+
+
 mysql = MySQL(application)
 
 @application.route("/")
@@ -29,4 +37,4 @@ def hello_world():
     return 'Connected'
 
 if __name__ == '__main__':
-    application.run()
+    application.run(host='0.0.0.0')
