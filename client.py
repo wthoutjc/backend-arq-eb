@@ -9,7 +9,7 @@ from threading import Thread, Event
 import logging
 import json
 
-# import eventlet
+import eventlet
 
 # # Globals
 socketio = None
@@ -24,7 +24,7 @@ class SocketIOClient(object):
         global socketio
         self.app = app
         CORS(self.app)
-        socketio = SocketIO(app, cors_allowed_origins='*') #cors_allowed_origins="*", async_mode="eventlet" http://frontend-arq.s3-website-sa-east-1.amazonaws.com/
+        socketio = SocketIO(app, cors_allowed_origins='*',async_mode="eventlet") #cors_allowed_origins="*", async_mode="eventlet" http://frontend-arq.s3-website-sa-east-1.amazonaws.com/
         self.connected_clients = {}
     
     def run(self):
@@ -51,8 +51,8 @@ class SocketIOClient(object):
             socketio.emit('message', {'message': 'Enviado desde backend'})
 
         # Conexión
-        socketio.run(self.app, host="0.0.0.0", port=443, debug=True) #host="0.0.0.0"
-        # eventlet.monkey_patch(socket=True, select=True)
+        socketio.run(self.app, host="0.0.0.0", port=80, debug=True) #host="0.0.0.0"
+        eventlet.monkey_patch(socket=True, select=True)
 
 class RandomThread(Thread):
     def __init__(self):
