@@ -19,13 +19,17 @@ import datetime                 # Manejo de fechas
 from decouple import config
 
 from decimal import Decimal
-
 application = Flask(__name__)
 
+app = application
 
-@application.route("/")
+app.config['SECRET_KEY'] = config('SECRET_KEY')
+app.config['JWT_SECRET_KEY'] = app.config['SECRET_KEY']
+db_operations = SQLOperations()
+
+@app.route("/")
 def hello_world():
     return 'Connected'
 
 if __name__ == '__main__':
-    application.run(host='0.0.0.0')
+    app.run(host='0.0.0.0')
