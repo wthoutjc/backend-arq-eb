@@ -40,17 +40,20 @@ class SocketIOClient(object):
             #     thread = RandomThread()
             #     thread.start()
             socketio.emit('message', {'message': 'Enviado desde backend'})
+            return 'ok', 200
 
         @socketio.on('disconnect')
         def on_disconnect():
             print(f'Cliente desconectado satisfactoriamente.')
             socketio.emit('message', {'message': 'Enviado desde backend'})
+            return 'ok', 200
 
         @socketio.on('messages')
         def on_messages(*args):
             response = [json.loads(data) for data in args]
             print(response)
             socketio.emit('message', {'message': 'Enviado desde backend'})
+            return 'ok', 200
 
         # Conexión
         socketio.run(self.app, host="0.0.0.0", debug=True) #host="0.0.0.0" port=8080
