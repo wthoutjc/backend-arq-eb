@@ -47,11 +47,11 @@ def on_disconnect():
 def on_messages(*args):
     response = [json.loads(data) for data in args]
     print(response)
-    socketio.emit('message', {'message': 'Enviado desde backend'})
+    socketio.emit('message', {'message': response})
 
 # Conexión
 if __name__ == '__main__':
-    socketio.run(app, port=8000, host="0.0.0.0") #host="0.0.0.0" port=80
+    socketio.run(app, port=8000, host="0.0.0.0", debug=True) #host="0.0.0.0" port=80
     eventlet.monkey_patch(socket=True, select=True)
 
 # app.config['SECRET_KEY'] = 'UHGx14#&17NoPRQS#12'
