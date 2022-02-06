@@ -22,11 +22,13 @@ import datetime                 # Manejo de fechas
 from decimal import Decimal
 
 from flask_socketio import SocketIO, send
+from gevent import pywsgi
 
 application = Flask(__name__)
 
 app = application
-socketio = SocketIO(app)
+sio = socketio.Server(async_mode='gevent')
+app = socketio.WSGIApp(sio)
 
 @socketio.on('connect')
 def on_connect():
@@ -49,7 +51,7 @@ def on_messages(): #*args
     # print(response)
     # socketio.emit('message', {'message': 'Enviado desde backend'})
     send('Enviado desde backend', broadcast=True)
-    
+
 if __name__ == '__main__':
     socketio.run(app)
 
