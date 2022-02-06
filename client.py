@@ -32,14 +32,10 @@ class SocketIOClient(object):
         self.socketio = SocketIO(app, cors_allowed_origins='*',async_mode="threading") #cors_allowed_origins="*", async_mode="eventlet" http://frontend-arq.s3-website-sa-east-1.amazonaws.com/
         self.connected_clients = {}
     
-    def run(self):
-        # Posible inclusión de Threads
-
-        # Rutas
         @self.socketio.on('connect')
         def on_connect():
             # global thread
-            print(f'Cliente conectado satisfactoriamente')
+            print(f'Cliente ff conectado satisfactoriamente')
 
             # if not thread.is_alive():
             #     thread = RandomThread()
@@ -47,7 +43,7 @@ class SocketIOClient(object):
 
         @self.socketio.on('disconnect')
         def on_disconnect():
-            print(f'Cliente desconectado satisfactoriamente.')
+            print(f'Cliente ff desconectado satisfactoriamente.')
 
         @self.socketio.on('messages')
         def on_messages(*args):
@@ -57,7 +53,7 @@ class SocketIOClient(object):
             print(random_number)
             self.socketio.emit('message', {'message': random_number})
 
-        # Conexión
+    def run(self):
         self.socketio.run(self.app, port=8000, host="0.0.0.0", debug=True) #host="0.0.0.0" port=80
         eventlet.monkey_patch(socket=True, select=True)
 
