@@ -24,6 +24,8 @@ from decimal import Decimal
 from flask_socketio import SocketIO
 from flask_cors import CORS
 
+import eventlet
+
 application = Flask(__name__)
 
 app = application
@@ -53,6 +55,7 @@ def on_messages(*args):
 # Conexión
 if __name__ == '__main__':
     socketio.run(app, port=8000, host="0.0.0.0") #host="0.0.0.0" port=80
+    eventlet.monkey_patch(socket=True, select=True)
 
 # app.config['SECRET_KEY'] = 'UHGx14#&17NoPRQS#12'
 # app.config['JWT_SECRET_KEY'] = app.config['SECRET_KEY']
