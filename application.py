@@ -15,6 +15,7 @@ from client import SocketIOClient
 # Herramientas
 import json                     # Estructura json
 import datetime                 # Manejo de fechas
+import os
 
 from decimal import Decimal
 
@@ -28,7 +29,12 @@ application = Flask(__name__)
 app = application
 
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origins='*',async_mode="eventlet") #cors_allowed_origins="*", async_mode="eventlet" http://frontend-arq.s3-website-sa-east-1.amazonaws.com/
+socketio = SocketIO(app, cors_allowed_origins='*',async_mode="threading") #cors_allowed_origins="*", async_mode="eventlet" http://frontend-arq.s3-website-sa-east-1.amazonaws.com/
+
+from random import seed
+from random import random
+
+seed(datetime.datetime.now())
 
 @app.route("/")
 def hello_world():
@@ -51,7 +57,7 @@ def on_disconnect():
 def on_messages(*args):
     response = [json.loads(data) for data in args]
     print(response)
-    socketio.emit('message', {'message': response})
+    socketio.emit('message', {'message': int(random() * 1000)})
 
 # Conexión
 if __name__ == '__main__':
