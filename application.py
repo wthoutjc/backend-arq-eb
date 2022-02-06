@@ -30,6 +30,10 @@ app = application
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins='*',async_mode="eventlet") #cors_allowed_origins="*", async_mode="eventlet" http://frontend-arq.s3-website-sa-east-1.amazonaws.com/
 
+@app.route("/")
+def hello_world():
+    return make_response(jsonify({"res": 'Connected'}), 200)
+
 @socketio.on('connect')
 def on_connect():
     # global thread
