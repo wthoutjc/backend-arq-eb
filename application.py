@@ -28,30 +28,31 @@ application = Flask(__name__)
 
 sio = socketio.Server(async_mode='gevent')
 app = socketio.WSGIApp(sio)
+
+@sio.on('connect')
+def on_connect():
+    # global thread
+    print(f'Cliente conectado satisfactoriamente')
+    send('Conectado', broadcast=True)
+
+    # if not thread.is_alive():
+    #     thread = RandomThread()
+    #     thread.start()
+
+@sio.on('disconnect')
+def on_disconnect():
+    print(f'Cliente desconectado satisfactoriamente.')
+    send('Desconectado', broadcast=True)
+
+@sio.on('messages')
+def on_messages(): #*args
+    # response = [json.loads(data) for data in args]
+    # print(response)
+    # socketio.emit('message', {'message': 'Enviado desde backend'})
+    send('Enviado desde backend', broadcast=True)
+
 pywsgi.WSGIServer(('', 8000), app,
                   handler_class=WebSocketHandler).serve_forever()
-
-# @sio.on('connect')
-# def on_connect():
-#     # global thread
-#     print(f'Cliente conectado satisfactoriamente')
-#     send('Conectado', broadcast=True)
-
-#     # if not thread.is_alive():
-#     #     thread = RandomThread()
-#     #     thread.start()
-
-# @sio.on('disconnect')
-# def on_disconnect():
-#     print(f'Cliente desconectado satisfactoriamente.')
-#     send('Desconectado', broadcast=True)
-
-# @sio.on('messages')
-# def on_messages(): #*args
-#     # response = [json.loads(data) for data in args]
-#     # print(response)
-#     # socketio.emit('message', {'message': 'Enviado desde backend'})
-#     send('Enviado desde backend', broadcast=True)
 
 # if __name__ == '__main__':
 #     sio.run(app)
