@@ -4,6 +4,7 @@ from flask_cors import CORS
 
 # # Hilos
 from threading import Thread, Event
+import threading
 
 # # Herramientas
 import logging
@@ -18,7 +19,6 @@ from random import random
 seed(datetime.datetime.now())
 
 # # Globals
-socketio = None
 # # thread = Thread()
 # # thread_stop_event = Event()
 
@@ -27,17 +27,16 @@ logging.basicConfig(filename='client.log', level=logging.DEBUG)
 
 class SocketIOClient(object):
     def __init__(self, app):
-        global socketio
         self.app = app
         CORS(self.app)
-        socketio = SocketIO(app, cors_allowed_origins='*',async_mode="threading") #cors_allowed_origins="*", async_mode="eventlet" http://frontend-arq.s3-website-sa-east-1.amazonaws.com/
+        self.socketio = SocketIO(app, cors_allowed_origins='*',async_mode="threading") #cors_allowed_origins="*", async_mode="eventlet" http://frontend-arq.s3-website-sa-east-1.amazonaws.com/
         self.connected_clients = {}
     
     def run(self):
         # Posible inclusión de Threads
 
         # Rutas
-        @socketio.on('connect')
+        @self.socketio.on('connect')
         def on_connect():
             # global thread
             print(f'Cliente conectado satisfactoriamente')
@@ -46,20 +45,20 @@ class SocketIOClient(object):
             #     thread = RandomThread()
             #     thread.start()
 
-        @socketio.on('disconnect')
+        @self.socketio.on('disconnect')
         def on_disconnect():
             print(f'Cliente desconectado satisfactoriamente.')
 
-        @socketio.on('messages')
+        @self.socketio.on('messages')
         def on_messages(*args):
             # response = [json.loads(data) for data in args]
             # print(response)
             random_number = int(random() * 1000)
             print(random_number)
-            socketio.emit('message', {'message': random_number})
+            self.socketio.emit('message', {'message': random_number})
 
         # Conexión
-        socketio.run(self.app, port=8000, host="0.0.0.0", debug=True) #host="0.0.0.0" port=80
+        self.socketio.run(self.app, port=8000, host="0.0.0.0", debug=True) #host="0.0.0.0" port=80
         eventlet.monkey_patch(socket=True, select=True)
 
 class RandomThread(Thread):
