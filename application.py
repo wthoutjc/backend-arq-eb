@@ -19,26 +19,15 @@ import os
 
 from decimal import Decimal
 
-from flask_socketio import SocketIO
-from flask_cors import CORS
-
-import eventlet
-
 application = Flask(__name__)
 
 app = application
 
-CORS(app)
-socketio = SocketIO(app, cors_allowed_origins='*',async_mode="threading") #cors_allowed_origins="*", async_mode="eventlet" http://frontend-arq.s3-website-sa-east-1.amazonaws.com/
-
-from random import seed
-from random import random
-
-seed(datetime.datetime.now())
-
 app.config['SECRET_KEY'] = 'UHGx14#&17NoPRQS#12'
 app.config['JWT_SECRET_KEY'] = app.config['SECRET_KEY']
+
 db_operations = SQLOperations()
+socketio = SocketIOClient(app)
 
 class DecimalEncoder(json.JSONEncoder):
   def default(self, obj):
@@ -141,29 +130,9 @@ def modify_token():
         print('Revoke Token Error:' + str(error))
         return make_response(jsonify({"results": 'SQL Operation Failed'}), 500)
 
-@socketio.on('connect')
-def on_connect():
-    # global thread
-    print(f'Cliente conectado satisfactoriamente')
-
-    # if not thread.is_alive():
-    #     thread = RandomThread()
-    #     thread.start()
-
-@socketio.on('disconnect')
-def on_disconnect():
-    print(f'Cliente desconectado satisfactoriamente.')
-
-@socketio.on('messages')
-def on_messages(*args):
-    response = [json.loads(data) for data in args]
-    print(response)
-    socketio.emit('message', {'message': int(random() * 1000)})
-
 # Conexión
 if __name__ == '__main__':
-    socketio.run(app, port=8000, host="0.0.0.0", debug=True) #host="0.0.0.0" port=80
-    eventlet.monkey_patch(socket=True, select=True)
+    socketio.run()
 
 
 # socketio_client = SocketIOClient(app)

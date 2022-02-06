@@ -8,8 +8,14 @@ from threading import Thread, Event
 # # Herramientas
 import logging
 import json
-
+import datetime
 import eventlet
+
+
+from random import seed
+from random import random
+
+seed(datetime.datetime.now())
 
 # # Globals
 socketio = None
@@ -24,7 +30,7 @@ class SocketIOClient(object):
         global socketio
         self.app = app
         CORS(self.app)
-        socketio = SocketIO(app, cors_allowed_origins='*',async_mode="eventlet") #cors_allowed_origins="*", async_mode="eventlet" http://frontend-arq.s3-website-sa-east-1.amazonaws.com/
+        socketio = SocketIO(app, cors_allowed_origins='*',async_mode="threading") #cors_allowed_origins="*", async_mode="eventlet" http://frontend-arq.s3-website-sa-east-1.amazonaws.com/
         self.connected_clients = {}
     
     def run(self):
@@ -48,10 +54,10 @@ class SocketIOClient(object):
         def on_messages(*args):
             response = [json.loads(data) for data in args]
             print(response)
-            socketio.emit('message', {'message': 'Enviado desde backend'})
+            socketio.emit('message', {'message': int(random() * 1000)})
 
         # Conexión
-        socketio.run(self.app, port=8000, host="0.0.0.0") #host="0.0.0.0" port=80
+        socketio.run(self.app, port=8000, host="0.0.0.0", debug=True) #host="0.0.0.0" port=80
         eventlet.monkey_patch(socket=True, select=True)
 
 class RandomThread(Thread):
