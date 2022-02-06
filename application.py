@@ -21,41 +21,38 @@ import datetime                 # Manejo de fechas
 
 from decimal import Decimal
 
-from flask_socketio import SocketIO, send
-from gevent import pywsgi
-from geventwebsocket.handler import WebSocketHandler
+from flask_socketio import SocketIO
+from flask_cors import CORS
+
 application = Flask(__name__)
 
-sio = socketio.Server(async_mode='gevent')
-app = socketio.WSGIApp(sio)
+app = application
 
-@sio.on('connect')
+CORS(app)
+socketio = SocketIO(app, cors_allowed_origins='*',async_mode="eventlet") #cors_allowed_origins="*", async_mode="eventlet" http://frontend-arq.s3-website-sa-east-1.amazonaws.com/
+
+@socketio.on('connect')
 def on_connect():
     # global thread
     print(f'Cliente conectado satisfactoriamente')
-    send('Conectado', broadcast=True)
 
     # if not thread.is_alive():
     #     thread = RandomThread()
     #     thread.start()
 
-@sio.on('disconnect')
+@socketio.on('disconnect')
 def on_disconnect():
     print(f'Cliente desconectado satisfactoriamente.')
-    send('Desconectado', broadcast=True)
 
-@sio.on('messages')
-def on_messages(): #*args
-    # response = [json.loads(data) for data in args]
-    # print(response)
-    # socketio.emit('message', {'message': 'Enviado desde backend'})
-    send('Enviado desde backend', broadcast=True)
+@socketio.on('messages')
+def on_messages(*args):
+    response = [json.loads(data) for data in args]
+    print(response)
+    socketio.emit('message', {'message': 'Enviado desde backend'})
 
-pywsgi.WSGIServer(('', 8000), app,
-                  handler_class=WebSocketHandler).serve_forever()
-
-# if __name__ == '__main__':
-#     sio.run(app)
+# Conexión
+if __name__ == '__main__':
+    socketio.run(app, port=8000, host="0.0.0.0") #host="0.0.0.0" port=80
 
 # app.config['SECRET_KEY'] = 'UHGx14#&17NoPRQS#12'
 # app.config['JWT_SECRET_KEY'] = app.config['SECRET_KEY']
