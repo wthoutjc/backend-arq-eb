@@ -28,9 +28,8 @@ application = Flask(__name__)
 
 app = application
 sio = socketio.Server(async_mode='gevent')
-app = socketio.WSGIApp(sio)
 
-@socketio.on('connect')
+@sio.on('connect')
 def on_connect():
     # global thread
     print(f'Cliente conectado satisfactoriamente')
@@ -40,12 +39,12 @@ def on_connect():
     #     thread = RandomThread()
     #     thread.start()
 
-@socketio.on('disconnect')
+@sio.on('disconnect')
 def on_disconnect():
     print(f'Cliente desconectado satisfactoriamente.')
     send('Desconectado', broadcast=True)
 
-@socketio.on('messages')
+@sio.on('messages')
 def on_messages(): #*args
     # response = [json.loads(data) for data in args]
     # print(response)
@@ -53,7 +52,7 @@ def on_messages(): #*args
     send('Enviado desde backend', broadcast=True)
 
 if __name__ == '__main__':
-    socketio.run(app)
+    sio.run(app)
 
 # app.config['SECRET_KEY'] = 'UHGx14#&17NoPRQS#12'
 # app.config['JWT_SECRET_KEY'] = app.config['SECRET_KEY']
