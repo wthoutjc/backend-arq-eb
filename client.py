@@ -52,9 +52,11 @@ class SocketIOClient(object):
 
         @socketio.on('messages')
         def on_messages(*args):
-            response = [json.loads(data) for data in args]
-            print(response)
-            socketio.emit('message', {'message': int(random() * 1000)})
+            # response = [json.loads(data) for data in args]
+            # print(response)
+            random_number = int(random() * 1000)
+            print(random_number)
+            socketio.emit('message', {'message': random_number})
 
         # Conexión
         socketio.run(self.app, port=8000, host="0.0.0.0", debug=True) #host="0.0.0.0" port=80
