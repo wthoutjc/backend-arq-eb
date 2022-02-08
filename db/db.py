@@ -184,3 +184,20 @@ class SQLOperations(object):
         except mysql.connector.Error as error:
             print('Insertar token blocklist Error: '+str(error))
             return ['Falló el registro del token', False]
+    
+    def create_alert(self, image):
+        '''
+        Creamos una alerta recibiendo la imagen del hardware
+        Args:
+            image: 
+        '''
+        try:              
+            self.today_date = datetime.datetime.now().strftime('%Y-%m-%d')
+            self.query = 'INSERT INTO alertas VALUES (NULL, %s, %s)'
+            self.image = image.read()
+            self.ncursor.execute(self.query, (self.today_date,self.image))
+            self.based.commit()
+            return ['Alerta añadida satisfactoriamente.', True]
+        except mysql.connector.Error as error:
+            print('Create alert Error: ' + str(error))
+            return ['Falló el registro de alert', False]

@@ -6,6 +6,8 @@ DROP TABLE IF EXISTS `users` CASCADE;
 
 DROP TABLE IF EXISTS `token_blocklist` CASCADE;
 
+DROP TABLE IF EXISTS `alertas` CASCADE;
+
 CREATE TABLE `users`(
 	`k_users` VARCHAR(35) NOT NULL,
     `n_nombre` VARCHAR(75) NOT NULL,
@@ -18,6 +20,13 @@ CREATE TABLE `token_blocklist`(
 	`k_token` BIGINT UNIQUE auto_increment,
 	`n_jti` VARCHAR(36) UNIQUE NOT NULL,
     `f_created` DATETIME NOT NULL
+);
+
+CREATE TABLE `alertas`(
+	`k_alerta` INT NOT NULL AUTO_INCREMENT,
+	`f_alerta` DATE NOT NULL,
+	`o_img` LONGBLOB NOT NULL,
+	PRIMARY KEY(k_alerta)
 );
 
 /* PRIMARY KEYS */

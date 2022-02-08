@@ -131,6 +131,22 @@ def modify_token():
         print('Revoke Token Error:' + str(error))
         return make_response(jsonify({"results": 'SQL Operation Failed'}), 500)
 
+# Alerta
+@app.route("/alert", methods=["POST"])
+def create():
+    if request.method == "POST":
+        if request.files: #En request.files van las imagenes
+            image = request.files['file']
+            print(image)
+        # if request.form: #En request.form van los strings
+        #     name = request.form['name']
+        #     link = request.form['link']
+        message, success = db_operations.create_alert(image)
+        if success:
+            return make_response(jsonify({"results": message}), 200)
+        return make_response(jsonify({"results": message}), 500)
+    return make_response(jsonify({"results": 'Falló la comunicacíon con el servidor.'}), 500)
+
 # Conexión
 if __name__ == '__main__':
     socketio.run()
