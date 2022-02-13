@@ -141,10 +141,11 @@ def create():
         # if request.form: #En request.form van los strings
         #     name = request.form['name']
         #     link = request.form['link']
-        message, success = db_operations.create_alert(image)
-        if success:
-            return make_response(jsonify({"results": message}), 200)
-        return make_response(jsonify({"results": message}), 500)
+            message, success = db_operations.create_alert(image)
+            if success:
+                return make_response(jsonify({"results": message}), 200)
+            return make_response(jsonify({"results": message}), 500)
+        return make_response(jsonify({"results": 'Falló el procesamiento de la imagen.'}), 500)
     return make_response(jsonify({"results": 'Falló la comunicacíon con el servidor.'}), 500)
 
 # Conexión

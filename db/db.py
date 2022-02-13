@@ -193,6 +193,7 @@ class SQLOperations(object):
         '''
         try:              
             self.today_date = datetime.datetime.now().strftime('%Y-%m-%d')
+            self.ncursor = self.login_database()
             self.query = 'INSERT INTO alertas VALUES (NULL, %s, %s)'
             self.image = image.read()
             self.ncursor.execute(self.query, (self.today_date,self.image))
