@@ -3,6 +3,7 @@ import mysql.connector
 # Herramientas
 import datetime
 import logging
+import base64
 
 # Config LOGS
 logging.basicConfig(filename='db.log', level=logging.DEBUG)
@@ -195,10 +196,25 @@ class SQLOperations(object):
             self.today_date = datetime.datetime.now().strftime('%Y-%m-%d')
             self.ncursor = self.login_database()
             self.query = 'INSERT INTO alertas VALUES (NULL, %s, %s)'
-            self.image = image.read()
-            self.ncursor.execute(self.query, (self.today_date,self.image))
+            self.ncursor.execute(self.query, (self.today_date,image))
             self.based.commit()
             return ['Alerta añadida satisfactoriamente.', True]
         except mysql.connector.Error as error:
             print('Create alert Error: ' + str(error))
             return ['Falló el registro de alert', False]
+
+    def get_alerts(self):
+        '''
+        Trae todas las alertas registradas en la db
+        '''
+        try:
+            self.ncursor = self.login_database()
+            self.query = "SELECT * FROM alertas ORDER BY k_alerta DESC, f_alerta DESC;"
+            self.ncursor.execute(self.query)
+            alerts = self.ncursor.fetchall()
+            if alerts:
+                return [[(data[0], data[1], base64.b64encode(alerts[0][2]).decode()) for data in alerts],True]
+            return ['No hay alertas registradas', False]
+        except mysql.connector.Error as error:
+            print('Create alert Error: ' + str(error))
+            return ['Falló la consulta de alertas', False]

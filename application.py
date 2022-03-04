@@ -134,24 +134,31 @@ def modify_token():
 # Alerta
 @app.route("/alert", methods=["POST"])
 def create():
+    print('alert')
     if request.method == "POST":
         if request.files: #En request.files van las imagenes
             image = request.files['file']
-            print(image)
-        # if request.form: #En request.form van los strings
-        #     name = request.form['name']
-        #     link = request.form['link']
-            message, success = db_operations.create_alert(image)
+            image_process = image.read()
+            message, success = db_operations.create_alert(image_process)
             if success:
+                socketio.emit_alert(image_process)
                 return make_response(jsonify({"results": message}), 200)
             return make_response(jsonify({"results": message}), 500)
         return make_response(jsonify({"results": 'Falló el procesamiento de la imagen.'}), 500)
     return make_response(jsonify({"results": 'Falló la comunicacíon con el servidor.'}), 500)
 
+@app.route("/getalerts")
+def get_alerts():
+    print('get_alerts')
+    alerts, success = db_operations.get_alerts()
+    if success:
+        return make_response(jsonify({"results":alerts}), 200)
+    return make_response(jsonify({"results": alerts}), 500)
+    
+
 # Conexión
 if __name__ == '__main__':
     socketio.run()
-
 
 # socketio_client = SocketIOClient(app)
 

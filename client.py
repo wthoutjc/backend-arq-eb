@@ -1,6 +1,7 @@
 #Configuración de SocketIO
 from flask_socketio import SocketIO
 from flask_cors import CORS
+from flask import jsonify
 
 # # Hilos
 from threading import Thread, Event
@@ -11,7 +12,7 @@ import logging
 import json
 import datetime
 import eventlet
-
+import base64
 
 from random import seed
 from random import random
@@ -52,6 +53,14 @@ class SocketIOClient(object):
             random_number = int(random() * 1000)
             print(random_number)
             self.socketio.emit('message', {'message': random_number})
+
+    def emit_alert(self, file):
+        '''
+        Emite una alerta
+        '''
+        # results['image'] = base64.b64encode(file).decode()
+        # print(results['image'])
+        self.socketio.emit('alert', {'image': file})
 
     def run(self):
         self.socketio.run(self.app, port=8000, host="0.0.0.0", debug=True) #host="0.0.0.0" port=80
