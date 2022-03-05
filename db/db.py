@@ -212,9 +212,64 @@ class SQLOperations(object):
             self.query = "SELECT * FROM alertas ORDER BY k_alerta DESC, f_alerta DESC;"
             self.ncursor.execute(self.query)
             alerts = self.ncursor.fetchall()
+            self.logout_database(self.ncursor)
             if alerts:
                 return [[(data[0], data[1], base64.b64encode(alerts[0][2]).decode()) for data in alerts],True]
             return ['No hay alertas registradas', False]
         except mysql.connector.Error as error:
             print('Create alert Error: ' + str(error))
             return ['Falló la consulta de alertas', False]
+    
+    def set_date(self, id_dispositivo, start_date, end_date):
+        '''
+        Configura el intervalo de horario para el funcionamiento
+        del dispositivo
+        Args:
+            - id_dispositivo: VARCHAR ID
+            - start_date = FECHA INICIO
+            - end_date = FECHA FINAL
+        '''
+        try:
+            # Verificamos si tiene fecha asignada
+            self.ncursor = self.login_database()
+            self.query = "SELECT * FROM fecha_alarma WHERE k_dispositivo = %s"
+            self.ncursor.execute(self.query, (id_dispositivo,))
+            date_alert = self.ncursor.fetchone()
+            self.logout_database(self.ncursor)
+            if date_alert:
+                #Si existe hacemos update
+                self.ncursor = self.login_database()
+                self.ncursor.execute("SET SQL_SAFE_UPDATES = 0")
+                self.query = "UPDATE fecha_alarma SET f_start = %s, f_end = %s WHERE k_dispositivo = %s"
+                self.ncursor.execute(self.query, (start_date, end_date, id_dispositivo,))
+                self.based.commit()
+                self.logout_database(self.ncursor)
+                return ['Horario configurado satisfactoriamente', True]
+            # Si no existe hacemos insert
+            self.ncursor = self.login_database()
+            self.query = "INSERT INTO fecha_alarma VALUES (NULL,%s,%s, %s)"
+            self.ncursor.execute(self.query, (start_date, end_date, id_dispositivo,))
+            self.based.commit()
+            self.logout_database(self.ncursor)
+            return ['Horario configurado satisfactoriamente', True]
+        except mysql.connector.Error as error:
+            print('Set alert error: ' + str(error))
+            return ['Falló la configuración de alertas', False]
+    
+    def get_date(self, id_dispositivo):
+        '''
+        Devuelve el horario configurado en el dispositivo
+        '''
+        try:
+            self.ncursor = self.login_database()
+            self.query = "SELECT f_start, f_end FROM fecha_alarma WHERE k_dispositivo = %s"
+            self.ncursor.execute(self.query,(id_dispositivo,))
+            horario = self.ncursor.fetchone()
+            self.logout_database(self.ncursor)
+            if horario:
+                return [horario, True]
+            return ['No tiene horario configurado', False]
+        except mysql.connector.Error as error:
+            print('Get alert date error: ' + str(error))
+            return ['Falló la consulta de horario de alertas', False]
+    

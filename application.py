@@ -1,5 +1,6 @@
 # Desarrollado por: https://github.com/wthoutjc
 # Universidad Distrital Francisco José de Caldas
+import re
 from flask import Flask, request, jsonify, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from mysql.connector.errors import Error
@@ -133,6 +134,7 @@ def modify_token():
 
 # Alerta
 @app.route("/alert", methods=["POST"])
+@jwt_required()
 def create():
     print('alert')
     if request.method == "POST":
@@ -148,13 +150,40 @@ def create():
     return make_response(jsonify({"results": 'Falló la comunicacíon con el servidor.'}), 500)
 
 @app.route("/getalerts")
+@jwt_required()
 def get_alerts():
     print('get_alerts')
     alerts, success = db_operations.get_alerts()
     if success:
         return make_response(jsonify({"results":alerts}), 200)
     return make_response(jsonify({"results": alerts}), 500)
-    
+
+@app.route("/setdate", methods=["POST"])
+@jwt_required()
+def set_date():
+    print('set_date')
+
+    data_raw = request.data.decode("utf-8")
+    json_data = json.loads(data_raw)
+
+    id_dispositivo = json_data['idDispositivo']
+    start_date = json_data['startDate']
+    end_date = json_data['endDate']
+
+    alerts, success = db_operations.set_date(id_dispositivo, start_date, end_date)
+    if success:
+        return make_response(jsonify({"results":alerts}), 200)
+    return make_response(jsonify({"results": alerts}), 500)
+
+@app.route("/getdate/<id>")
+@jwt_required()
+def get_date(id):
+    print('get_date')
+
+    alerts, success = db_operations.get_date(id)
+    if success:
+        return make_response(jsonify({"results":alerts}), 200)
+    return make_response(jsonify({"results": alerts}), 500)
 
 # Conexión
 if __name__ == '__main__':

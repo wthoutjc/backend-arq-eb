@@ -8,6 +8,10 @@ DROP TABLE IF EXISTS `token_blocklist` CASCADE;
 
 DROP TABLE IF EXISTS `alertas` CASCADE;
 
+DROP TABLE IF EXISTS `dispositivos` CASCADE;
+
+DROP TABLE IF EXISTS `fecha_alarma` CASCADE;
+
 CREATE TABLE `users`(
 	`k_users` VARCHAR(35) NOT NULL,
     `n_nombre` VARCHAR(75) NOT NULL,
@@ -29,8 +33,26 @@ CREATE TABLE `alertas`(
 	PRIMARY KEY(k_alerta)
 );
 
+CREATE TABLE `fecha_alarma`(
+	`k_alarma` BIGINT UNIQUE auto_increment,
+	`f_config` DATE NOT NULL,
+    `k_dispositivo` BIGINT NOT NULL
+);
+
+CREATE TABLE `dispositivos`(
+	`k_dispositivo` BIGINT NOT NULL,
+    `n_nombre` VARCHAR(200) NOT NULL,
+    `k_users` VARCHAR(35) NOT NULL
+);
+
 /* PRIMARY KEYS */
 ALTER TABLE `users` ADD CONSTRAINT `PK_k_users` PRIMARY KEY (k_users);
+
+ALTER TABLE `token_blocklist` ADD CONSTRAINT `PK_k_token` PRIMARY KEY (k_token);
+
+ALTER TABLE `fecha_alarma` ADD CONSTRAINT `PK_k_alama` PRIMARY KEY (k_alarma);
+
+ALTER TABLE `dispositivo` ADD CONSTRAINT `PK_k_dispositivo` PRIMARY KEY (k_dispositivo);
 
 ALTER TABLE `token_blocklist` ADD CONSTRAINT `PK_k_token` PRIMARY KEY (k_token);
 
