@@ -214,7 +214,7 @@ class SQLOperations(object):
             alerts = self.ncursor.fetchall()
             self.logout_database(self.ncursor)
             if alerts:
-                return [[(data[0], data[1], base64.b64encode(alerts[0][2]).decode()) for data in alerts],True]
+                return [[(data[0], data[1], base64.b64encode(data[2]).decode()) for data in alerts],True]
             return ['No hay alertas registradas', False]
         except mysql.connector.Error as error:
             print('Create alert Error: ' + str(error))
