@@ -134,7 +134,7 @@ def modify_token():
 
 # Alerta
 @app.route("/alert", methods=["POST"])
-@jwt_required()
+# @jwt_required()
 def create():
     print('alert')
     if request.method == "POST":
